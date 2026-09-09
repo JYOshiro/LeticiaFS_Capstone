@@ -98,7 +98,7 @@
         /* KPI Cards Grid */
         .kpi-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 1.25rem;
             margin-bottom: 1.75rem;
         }
@@ -108,41 +108,35 @@
             backdrop-filter: blur(12px);
             border: 1px solid var(--card-border);
             border-radius: 16px;
-            padding: 1.25rem 1.5rem;
-            transition: transform 0.2s ease, border-color 0.2s ease;
-        }
-
-        .kpi-card:hover {
-            transform: translateY(-3px);
-            border-color: rgba(56, 189, 248, 0.4);
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
         }
 
         .kpi-label {
-            color: var(--text-muted);
             font-size: 0.825rem;
+            color: var(--text-muted);
             font-weight: 600;
-            margin-bottom: 0.4rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
         .kpi-value {
-            font-size: 2.1rem;
+            font-size: 1.9rem;
             font-weight: 800;
             color: var(--text-main);
-            margin-bottom: 0.2rem;
         }
 
         .kpi-sub {
             font-size: 0.825rem;
             color: var(--success-accent);
-            font-weight: 600;
+            font-weight: 700;
         }
 
-        .kpi-sub.warning { color: var(--warning-accent); }
         .kpi-sub.danger { color: var(--danger-accent); }
 
-        /* Tabs Navigation */
+        /* Navigation Tabs */
         .tabs-nav {
             display: flex;
             gap: 0.6rem;
@@ -220,7 +214,7 @@
 
         #australiaMap {
             width: 100%;
-            height: 520px;
+            height: 480px;
             border-radius: 14px;
             background: #0F172A;
             z-index: 1;
@@ -301,14 +295,44 @@
             line-height: 1.4;
         }
 
+        /* Chart Box & Fixed Height Canvas Container */
         .chart-box {
             background: var(--card-bg);
             backdrop-filter: blur(12px);
             border: 1px solid var(--card-border);
             border-radius: 20px;
             padding: 1.5rem;
-            min-height: 480px;
+            height: 480px;
+            max-height: 480px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .canvas-container {
             position: relative;
+            width: 100%;
+            height: 380px;
+            max-height: 380px;
+            overflow: hidden;
+        }
+
+        /* Figure Caption Banner Styling */
+        .fig-caption-banner {
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            color: var(--primary-accent);
+            padding: 0.6rem 1.1rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-align: center;
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            box-sizing: border-box;
         }
 
         /* Matrix Table */
@@ -352,6 +376,25 @@
 
         .badge-pass { background: rgba(52, 211, 153, 0.15); color: #34D399; padding: 0.25rem 0.5rem; border-radius: 6px; font-weight: 700; }
         .badge-winner { background: rgba(56, 189, 248, 0.2); color: #38BDF8; padding: 0.25rem 0.5rem; border-radius: 6px; font-weight: 800; }
+
+        /* Subdivision Cards */
+        .subdivision-explanation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .sub-card {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 1.1rem;
+        }
+        .sub-card-header { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+        .sub-code { font-weight: 800; color: var(--primary-accent); }
+        .sub-share { font-size: 0.8rem; color: var(--success-accent); font-weight: 700; }
+        .sub-title-pt { font-weight: 700; color: var(--text-main); margin-bottom: 0.4rem; }
+        .sub-desc { font-size: 0.825rem; color: var(--text-muted); }
     </style>
 </head>
 <body>
@@ -394,6 +437,7 @@
         <!-- Navigation Tabs -->
         <div class="tabs-nav">
             <button class="tab-btn active" onclick="switchTab('tab-map')">🗺️ Territory Density Map (2035 Policy)</button>
+            <button class="tab-btn" onclick="switchTab('tab-state-capacity')">🏛️ State Capacity Comparison (Figure 13)</button>
             <button class="tab-btn" onclick="switchTab('tab-forecasting')">📈 Forecasting Benchmark (SARIMAX vs Prophet vs SARIMA)</button>
             <button class="tab-btn" onclick="switchTab('tab-tree')">🌳 Decision Tree Policy Model</button>
             <button class="tab-btn" onclick="switchTab('tab-validation')">✅ Model Validation & Metric KPIs</button>
@@ -410,6 +454,9 @@
                     <h2>Australia Health Vulnerability & Allocation Map (Click State to Inspect)</h2>
                 </div>
                 <div id="australiaMap"></div>
+                <div class="fig-caption-banner">
+                    Figure 6: Department of Health 2035 Resource Allocation Map (Territory Risk & Vulnerability Index)
+                </div>
             </div>
             <div class="insight-box">
                 <h3><i>🎯</i> Strategic Allocation Diagnosis</h3>
@@ -433,10 +480,43 @@
             </div>
         </div>
 
+        <!-- TAB STATE CAPACITY COMPARISON (FIGURE 13) -->
+        <div id="tab-state-capacity" class="tab-panel">
+            <div class="chart-box">
+                <div style="width: 100%; height: 380px; display: flex; align-items: center; justify-content: center;">
+                    <img src="figure13_state_workforce_capacity_comparison.png" alt="Figure 13: State Workforce Capacity Comparison" style="max-width: 100%; max-height: 360px; border-radius: 12px; border: 1px solid var(--card-border);">
+                </div>
+                <div class="fig-caption-banner">
+                    Figure 13: Clinical Workforce Capacity & Density Comparison by State / Territory (2024 Panel Data)
+                </div>
+            </div>
+            <div class="insight-box">
+                <h3><i>🏛️</i> State & Territory Capacity Breakdown</h3>
+                
+                <div class="state-detail-card">
+                    <h4>Capacity Benchmark Highlights</h4>
+                    <div class="detail-row"><span class="label">Northern Territory (NT):</span><span class="val" style="color: #EF4444;">65 Doctor / 420 RN FTE per 100k (Tier 1)</span></div>
+                    <div class="detail-row"><span class="label">Tasmania (TAS):</span><span class="val" style="color: #F97316;">Aging Cohort (31.2% > 55 yrs)</span></div>
+                    <div class="detail-row"><span class="label">Western Australia (WA):</span><span class="val" style="color: #F97316;">Outback Supply Deficit (58 FTE/100k)</span></div>
+                    <div class="detail-row"><span class="label">ACT & Victoria (VIC):</span><span class="val" style="color: #38BDF8;">Highest Density (>345 FTE/100k Baseline)</span></div>
+                </div>
+
+                <div class="policy-recommendation-box">
+                    <h5>State Priority Key Insight:</h5>
+                    <p>NT and regional WA require immediate Tier 1 intervention through fast-tracked skilled visas and remote housing stipends to address critical capacity deficits.</p>
+                </div>
+            </div>
+        </div>
+
         <!-- TAB FORECASTING: Time-Series Model Comparison -->
         <div id="tab-forecasting" class="tab-panel">
-            <div class="chart-box" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                <img src="figure12_time_series_model_comparison.png" alt="Figure 12: Time Series Model Comparison" style="max-width: 100%; border-radius: 12px; border: 1px solid var(--card-border);">
+            <div class="chart-box">
+                <div style="width: 100%; height: 380px; display: flex; align-items: center; justify-content: center;">
+                    <img src="figure12_time_series_model_comparison.png" alt="Figure 12: Time Series Model Comparison" style="max-width: 100%; max-height: 360px; border-radius: 12px; border: 1px solid var(--card-border);">
+                </div>
+                <div class="fig-caption-banner">
+                    Figure 12: Time-Series Forecasting Model Performance Benchmark: SARIMAX (Winner) vs Prophet vs SARIMA (2013–2035 Horizon)
+                </div>
             </div>
             <div class="insight-box">
                 <h3><i>📈</i> Time-Series Model Benchmark Results</h3>
@@ -450,15 +530,20 @@
 
                 <div class="policy-recommendation-box">
                     <h5>Why SARIMAX is the Optimal Model:</h5>
-                    <p><strong>SARIMAX</strong> incorporates exogenous variables (ABS Job Vacancies Index & Home Affairs Skilled Migration Inflows), allowing it to capture demand shocks and policy interventions. Univariate models like SARIMA underpredict demand by ignoring economic signals.</p>
+                    <p><strong>SARIMAX</strong> incorporates exogenous variables (ABS Job Vacancies Index & Home Affairs Skilled Migration Inflows), allowing it to capture demand shocks and policy interventions.</p>
                 </div>
             </div>
         </div>
 
         <!-- TAB DECISION TREE: Decision Tree Policy Model -->
         <div id="tab-tree" class="tab-panel">
-            <div class="chart-box" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                <img src="figure11_decision_tree_policy_rules.png" alt="Figure 11: Decision Tree Rules" style="max-width: 100%; border-radius: 12px; border: 1px solid var(--card-border);">
+            <div class="chart-box">
+                <div style="width: 100%; height: 380px; display: flex; align-items: center; justify-content: center;">
+                    <img src="figure11_decision_tree_policy_rules.png" alt="Figure 11: Decision Tree Rules" style="max-width: 100%; max-height: 360px; border-radius: 12px; border: 1px solid var(--card-border);">
+                </div>
+                <div class="fig-caption-banner">
+                    Figure 11: Department of Health Strategic Decision Tree Rule-Based Policy Classifier (2035 Horizon)
+                </div>
             </div>
             <div class="insight-box">
                 <h3><i>🌳</i> Decision Tree Rule-Based Policy Classifier</h3>
@@ -474,7 +559,6 @@
                 <div class="policy-recommendation-box">
                     <h5>Explicit Policy Decision Rules:</h5>
                     <p><strong>IF</strong> Remoteness &ge; MM6 (Remote/Very Remote) <strong>THEN</strong> Classify as <strong>Tier 1: Critical Emergency Funding & Home Affairs Skilled Visas</strong>.</p>
-                    <p style="margin-top: 0.4rem;"><strong>IF</strong> Remoteness &ge; MM3 AND Density Deficit &gt; 30% <strong>THEN</strong> Classify as <strong>Tier 2: High Regional Support (Generalist Grants)</strong>.</p>
                 </div>
             </div>
         </div>
@@ -482,7 +566,12 @@
         <!-- TAB VALIDATION: Model Validation KPIs -->
         <div id="tab-validation" class="tab-panel">
             <div class="chart-box">
-                <canvas id="chartValidationBacktest"></canvas>
+                <div class="canvas-container">
+                    <canvas id="chartValidationBacktest"></canvas>
+                </div>
+                <div class="fig-caption-banner">
+                    Figure 10: Predictive Model Validation KPIs, Backtest Accuracy & Remoteness Replenishment Ratios
+                </div>
             </div>
             <div class="insight-box">
                 <h3><i>✅</i> Predictive Model Validation Scorecard</h3>
@@ -506,7 +595,12 @@
         <!-- TAB MET: Medical Education & Training -->
         <div id="tab-met" class="tab-panel">
             <div class="chart-box">
-                <canvas id="chartMetUnis"></canvas>
+                <div class="canvas-container">
+                    <canvas id="chartMetUnis"></canvas>
+                </div>
+                <div class="fig-caption-banner">
+                    Figure 7: Australian Medical Student Supply Pipeline by University (MET Dataset)
+                </div>
             </div>
             <div class="insight-box">
                 <h3><i>🎓</i> Medical Supply Pipeline Insights</h3>
@@ -548,12 +642,23 @@
                         <div class="sub-desc">Non-residential social, welfare, and community support services for people with disabilities, aged persons, and families.</div>
                     </div>
                 </div>
+
+                <div class="fig-caption-banner" style="margin-top: 1.25rem;">
+                    Figure 3: Concentration of Health Workforce Employment & Figure 4: Remoteness Density Gap Analysis
+                </div>
             </div>
         </div>
 
         <!-- TAB 1: Workforce Growth & Diversity -->
         <div id="tab-growth" class="tab-panel">
-            <div class="chart-box"><canvas id="chartGrowth"></canvas></div>
+            <div class="chart-box">
+                <div class="canvas-container">
+                    <canvas id="chartGrowth"></canvas>
+                </div>
+                <div class="fig-caption-banner">
+                    Figure 1: Australia's Health Workforce Growth & Multi-Disciplinary Composition (2013–2024, NHWD Data)
+                </div>
+            </div>
             <div class="insight-box">
                 <h3><i>📊</i> Workforce Diversity</h3>
                 <p style="color: var(--text-muted);">Demonstrates that Australia relies on a multi-disciplinary ecosystem. Occupational Therapy (+118.8%) and Physiotherapy (+83.9%) show the highest expansion rates.</p>
@@ -562,7 +667,14 @@
 
         <!-- TAB 4: 2035 Horizon Projections -->
         <div id="tab-2035" class="tab-panel">
-            <div class="chart-box"><canvas id="chart2035"></canvas></div>
+            <div class="chart-box">
+                <div class="canvas-container">
+                    <canvas id="chart2035"></canvas>
+                </div>
+                <div class="fig-caption-banner">
+                    Figure 5: Australian Health Workforce Horizon Forecast to 2035
+                </div>
+            </div>
             <div class="insight-box">
                 <h3><i>🔮</i> 2035 Planning Horizon</h3>
                 <p style="color: var(--text-muted);">Jobs and Skills Australia projects a 23% expansion in health employment (+541,900 jobs) by May 2035.</p>
@@ -606,6 +718,7 @@
         ];
 
         let map;
+        let chartValidation, chartMet, chartGrowth, chart2035;
 
         function initMap() {
             map = L.map('australiaMap', { center: [-25.2744, 133.7751], zoom: 4 });
@@ -631,15 +744,27 @@
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
             event.currentTarget.classList.add('active');
-            document.getElementById(tabId).classList.add('active');
-            if (tabId === 'tab-map' && map) setTimeout(() => map.invalidateSize(), 200);
+            const activePanel = document.getElementById(tabId);
+            activePanel.classList.add('active');
+            
+            if (tabId === 'tab-map' && map) {
+                setTimeout(() => map.invalidateSize(), 200);
+            }
+
+            // Trigger chart resize for newly visible panel to maintain fixed height
+            setTimeout(() => {
+                if (tabId === 'tab-validation' && chartValidation) chartValidation.resize();
+                if (tabId === 'tab-met' && chartMet) chartMet.resize();
+                if (tabId === 'tab-growth' && chartGrowth) chartGrowth.resize();
+                if (tabId === 'tab-2035' && chart2035) chart2035.resize();
+            }, 100);
         }
 
         window.onload = function() {
             initMap();
 
             // Chart Validation Backtest
-            new Chart(document.getElementById('chartValidationBacktest'), {
+            chartValidation = new Chart(document.getElementById('chartValidationBacktest'), {
                 type: 'line',
                 data: {
                     labels: [2018, 2019, 2020, 2021, 2022, 2023, 2024],
@@ -648,21 +773,35 @@
                         { label: 'SARIMAX Forecast (MAPE = 0.18%)', data: [585.1, 624.0, 644.2, 668.9, 690.1, 724.0, 755.8], borderColor: '#34D399', borderDash: [4, 4], borderWidth: 3, pointRadius: 5 }
                     ]
                 },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Model Backtest Validation: Actual vs SARIMAX Forecast (R² = 0.9997)', color: '#F8FAFC', font: { size: 15 } }, legend: { labels: { color: '#94A3B8' } } }, scales: { x: { ticks: { color: '#94A3B8' } }, y: { ticks: { color: '#94A3B8' } } } }
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    plugins: { 
+                        title: { display: true, text: 'Model Backtest Validation: Actual vs SARIMAX Forecast (R² = 0.9997)', color: '#F8FAFC', font: { size: 14, weight: 'bold' } }, 
+                        legend: { labels: { color: '#94A3B8' } } 
+                    }, 
+                    scales: { x: { ticks: { color: '#94A3B8' } }, y: { ticks: { color: '#94A3B8' } } } 
+                }
             });
 
             // Chart MET Unis
-            new Chart(document.getElementById('chartMetUnis'), {
+            chartMet = new Chart(document.getElementById('chartMetUnis'), {
                 type: 'bar',
                 data: {
                     labels: ['UNSW', 'Queensland', 'Monash UG', 'Melbourne MD', 'Sydney', 'James Cook', 'Newcastle/UNE', 'Adelaide', 'UWA MD', 'Griffith'],
                     datasets: [{ label: 'Total Medical Students Enrolled', data: [1635, 1580, 1448, 1391, 1168, 1132, 1049, 959, 844, 665], backgroundColor: '#38BDF8', borderRadius: 6 }]
                 },
-                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#94A3B8' } }, y: { ticks: { color: '#94A3B8' } } } }
+                options: { 
+                    indexAxis: 'y', 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    plugins: { legend: { display: false } }, 
+                    scales: { x: { ticks: { color: '#94A3B8' } }, y: { ticks: { color: '#94A3B8' } } } 
+                }
             });
 
-            // Chart 1
-            new Chart(document.getElementById('chartGrowth'), {
+            // Chart Growth
+            chartGrowth = new Chart(document.getElementById('chartGrowth'), {
                 type: 'line',
                 data: {
                     labels: [2013, 2015, 2017, 2019, 2021, 2023, 2024],
@@ -672,11 +811,16 @@
                         { label: 'Allied Health Total', data: [108.7, 118.4, 127.6, 157.2, 173.2, 190.8, 201.1], borderColor: '#34D399', tension: 0.3 }
                     ]
                 },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#94A3B8' } } }, scales: { x: { ticks: { color: '#94A3B8' } }, y: { ticks: { color: '#94A3B8' } } } }
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    plugins: { legend: { labels: { color: '#94A3B8' } } }, 
+                    scales: { x: { ticks: { color: '#94A3B8' } }, y: { ticks: { color: '#94A3B8' } } } 
+                }
             });
 
-            // Chart 4
-            new Chart(document.getElementById('chart2035'), {
+            // Chart 2035 Horizon
+            chart2035 = new Chart(document.getElementById('chart2035'), {
                 type: 'line',
                 data: {
                     labels: [2013, 2016, 2019, 2022, 2024, 2027, 2030, 2033, 2035],
@@ -685,7 +829,12 @@
                         { label: '2035 SARIMAX Forecast', data: [null, null, null, null, 757.5, 814.2, 874.1, 936.5, 979.5], borderColor: '#34D399', borderDash: [6, 6], borderWidth: 3 }
                     ]
                 },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#94A3B8' } } }, scales: { x: { ticks: { color: '#94A3B8' } }, y: { ticks: { color: '#94A3B8' } } } }
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    plugins: { legend: { labels: { color: '#94A3B8' } } }, 
+                    scales: { x: { ticks: { color: '#94A3B8' } }, y: { ticks: { color: '#94A3B8' } } } 
+                }
             });
         };
     </script>

@@ -198,6 +198,32 @@
             gap: 0.5rem;
         }
 
+        /* Figure Container & Caption Banner Styling */
+        .fig-wrapper {
+            margin: 1.75rem 0;
+            text-align: center;
+        }
+
+        .fig-wrapper img {
+            max-width: 100%;
+            border-radius: 14px;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .fig-caption-banner {
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            color: var(--primary-accent);
+            padding: 0.65rem 1.2rem;
+            border-radius: 10px;
+            font-size: 0.875rem;
+            font-weight: 700;
+            display: inline-block;
+            margin-top: 0.85rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
         /* Table Styling */
         table.audit-table {
             width: 100%;
@@ -297,17 +323,15 @@
             
             <div class="prose-text">
                 <p>
-                    Australia's healthcare system depends on a large and diverse workforce that includes medical practitioners, nurses, allied health professionals, and other clinical occupations. However, workforce growth does not necessarily mean that capacity is equally distributed across professions or locations. The Department of Health, Disability and Ageing's <em>Workforce Intelligence Report 2025</em> examines projected changes through to 2035 and highlights workforce retention, attrition, and re-entry as important considerations for future planning (Department of Health, Disability and Ageing, 2025).
+                    Australia's healthcare and social assistance sector is the nation's largest employer, accounting for <strong>2.6 million filled jobs</strong> (16.4% of national employment) with job vacancies remaining <strong>98.1% above pre-pandemic baselines</strong> (ABS, 2024, 2025). Between 2013 and 2024, total registered clinical headcounts expanded by <strong>+50.3%</strong> (503,995 to 757,517 practitioners). However, growth was highly skewed toward allied health disciplines while specialist medical supply lagged behind population demand (AIHW, 2025; Department of Health, 2025).
                 </p>
                 <p>
-                    Geography is particularly important. As explicitly demonstrated in <strong>Figure 4</strong>, people living in rural and remote Australia generally experience poorer access to health services and poorer health outcomes than people living in metropolitan areas (Australian Institute of Health and Welfare, 2025). At the same time, health care and social assistance is Australia's largest employing industry, accounting for approximately <strong>2.6 million filled jobs</strong> by September 2024 (Australian Bureau of Statistics, 2024). Labour demand also remains strong: in 2025, job vacancies in health care were still <strong>98.1% above their pre-pandemic level</strong> (Australian Bureau of Statistics, 2025).
+                    <strong>Key Industry Metrics & Geographic Distribution:</strong>
                 </p>
-                <p>
-                    As illustrated in <strong>Figure 1</strong>, National Health Workforce Dataset (NHWD) empirical metrics confirm that total registered clinical headcounts expanded by <strong>+50.3%</strong> (from 503,995 in 2013 to 757,517 in 2024). <strong>Figure 1</strong> directly supports our claim that growth was highly skewed toward allied health disciplines such as Occupational Therapy (+118.8%) and Physiotherapy (+83.9%), while specialist medical supply lagged behind population demand growth.
-                </p>
-                <p>
-                    <strong>Definition of Employment Concentration:</strong> In evaluating state-level workforce distribution, <em>Employment Concentration</em> is defined as the percentage share of total state/territory employment represented by ANZSIC Division Q (Health Care and Social Assistance), compared against the national benchmark of 16.4%. As shown in <strong>Figure 3</strong>, South Australia (18.6%) and Queensland (18.3%) exhibit high employment concentration. Conversely, Western Australia (15.3%) and the Northern Territory (11.2%) show low health employment concentration despite experiencing severe remote access deficits.
-                </p>
+                <ul>
+                    <li><strong>Employment Concentration:</strong> Defined as ANZSIC Division Q's percentage share of total state employment vs the 16.4% national baseline (highest in SA at 18.6%; lowest in NT at 11.2%).</li>
+                    <li><strong>Remoteness Supply Gap:</strong> While Major Cities (MM1) maintain 345 doctors per 100k population, Very Remote zones (MM6–MM7) suffer a <strong>-25.2% doctor deficit</strong> (258 / 100k) and a catastrophic <strong>-86.4% specialist density deficit</strong> (21 FTE / 100k vs 154 metro).</li>
+                </ul>
             </div>
 
             <!-- Key Metric Cards -->
@@ -345,6 +369,22 @@
                 </p>
             </div>
 
+            <!-- Figure 12 Visual -->
+            <div class="fig-wrapper">
+                <img src="figure12_time_series_model_comparison.png" alt="Figure 12: Forecasting Model Comparison">
+                <div>
+                    <span class="fig-caption-banner">Figure 12: Time-Series Forecasting Model Performance Benchmark: SARIMAX (Winner) vs Prophet vs SARIMA (2013–2035 Horizon)</span>
+                </div>
+            </div>
+
+            <!-- Figure 11 Visual -->
+            <div class="fig-wrapper">
+                <img src="figure11_decision_tree_policy_rules.png" alt="Figure 11: Decision Tree Rules">
+                <div>
+                    <span class="fig-caption-banner">Figure 11: Department of Health Strategic Decision Tree Rule-Based Policy Classifier (2035 Horizon)</span>
+                </div>
+            </div>
+
             <!-- Skilled Migration Box -->
             <div class="home-affairs-box">
                 <span class="section-badge success">Skilled Migration Alignment</span>
@@ -352,18 +392,10 @@
                 <p class="prose-text" style="margin-bottom: 1rem;">
                     As depicted in <strong>Figure 9</strong>, official statistics from the <em>Department of Home Affairs Annual Report 2024–25</em> confirm the strategic role of skilled migration in offsetting clinical capacity deficits:
                 </p>
-                <div class="stat-grid" style="margin: 1rem 0;">
-                    <div class="stat-card">
-                        <div class="val" style="color: #818CF8;">132,200</div>
-                        <div class="lbl">Skill Stream Permanent Places (71.5% of Migration Program)</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="val" style="color: #34D399;">+33%</div>
-                        <div class="lbl">Increase in Employer Sponsored Visa Grants (Driven by Health)</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="val" style="color: #F97316;">66,000</div>
-                        <div class="lbl">Combined Regional & State Nominated Visa Allocations</div>
+                <div class="fig-wrapper">
+                    <img src="figure9_home_affairs_skilled_migration.png" alt="Figure 9: Home Affairs Skilled Migration">
+                    <div>
+                        <span class="fig-caption-banner">Figure 9: Home Affairs 2024–25 Skilled Migration Program Allocations & Healthcare Visa Growth</span>
                     </div>
                 </div>
             </div>
@@ -378,17 +410,39 @@
                     <strong>Figure 13</strong> presents a direct comparative benchmark of average Clinical FTE per 100,000 population across all eight Australian states and territories in 2024. The Northern Territory exhibits the lowest clinical capacity, averaging only 65 Doctor FTE and 420 Registered Nurse FTE per 100k population—placing it squarely in <strong>Tier 1 Critical Emergency Priority</strong>. Tasmania and Western Australia Outback also trail significantly behind national benchmarks.
                 </p>
             </div>
-            <div style="text-align: center; margin-top: 1.25rem;">
-                <img src="figure13_state_workforce_capacity_comparison.png" alt="Figure 13: State Capacity Comparison" style="max-width: 100%; border-radius: 14px; border: 1px solid var(--card-border);">
+            
+            <!-- Figure 13 Visual -->
+            <div class="fig-wrapper">
+                <img src="figure13_state_workforce_capacity_comparison.png" alt="Figure 13: State Capacity Comparison">
+                <div>
+                    <span class="fig-caption-banner">Figure 13: Clinical Workforce Capacity & Density Comparison by State / Territory (2024 Panel Data)</span>
+                </div>
             </div>
         </section>
 
         <!-- SECTION 4: Data Sources & ANZSIC Subdivisions -->
         <section class="report-section">
             <span class="section-badge">Section 4 • Data Architecture</span>
-            <h2 class="section-heading">4. Data Sources & ANZSIC Subdivisions 84 to 87</h2>
+            <h2 class="section-heading">4. Data Sources & Project Framework</h2>
             
             <div class="prose-text">
+                <p>
+                    To solve this healthcare allocation problem, we designed and deployed a custom project-specific framework: the <strong>Predictive Clinical Capacity & Policy Framework (PCCPF)</strong>, as visualized in <strong>Figure 14</strong>.
+                </p>
+            </div>
+
+            <!-- Figure 14 Visual -->
+            <div class="fig-wrapper">
+                <img src="figure14_project_custom_framework.png" alt="Figure 14: Project Framework Architecture">
+                <div>
+                    <span class="fig-caption-banner">Figure 14: Predictive Clinical Capacity & Policy Framework (PCCPF) Custom Project Methodology Architecture</span>
+                </div>
+            </div>
+
+            <div class="prose-text" style="margin-top: 1.5rem;">
+                <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--primary-accent); margin-bottom: 0.5rem;">
+                    ABS Employment Data: Operational Commentary on ANZSIC Subdivisions 84 to 87
+                </h3>
                 <p>
                     Understanding the operational structure of ANZSIC Division Q (Health Care and Social Assistance) is essential for workforce strategy:
                 </p>
@@ -493,9 +547,6 @@
                     </div>
                     <div class="ref-item">
                         <strong>Jobs and Skills Australia. (2026).</strong> <em>Health Care and Social Assistance Workforce Outlook 2026</em>. JSA, Australian Government.
-                    </div>
-                    <div class="ref-item">
-                        <strong>Medical Education and Training Data Collection. (2025).</strong> <em>Medical Student Enrolments and Clinical Placement Days Report (2013–2024)</em>. Department of Health, Australian Government.
                     </div>
                     <div class="ref-item">
                         <strong>National Health Workforce Dataset. (2024).</strong> <em>Registered Health Practitioner Headcounts and Clinical FTE 2013–2024</em>. Department of Health, Australian Government.
