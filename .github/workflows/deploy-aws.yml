@@ -1,0 +1,61 @@
+name: Deploy website to AWS
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - site/**
+      - infra/**
+      - .github/workflows/deploy-aws.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: leticiafs-capstone-production
+  cancel-in-progress: false
+
+env:
+  AWS_REGION: ${{ vars.AWS_REGION }}
+  AWS_STACK_NAME: leticiafs-capstone-site
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Configure AWS credentials with OIDC
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          role-session-name: github-leticiafs-capstone-${{ github.run_id }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Provision static-site infrastructure
+        run: >-
+          aws cloudformation deploy
+          --stack-name "$AWS_STACK_NAME"
+          --template-file infra/static-site.yml
+          --no-fail-on-empty-changeset
+
+      - name: Read deployment outputs
+        id: site
+        run: |
+          echo "bucket=$(aws cloudformation describe-stacks --stack-name "$AWS_STACK_NAME" --query "Stacks[0].Outputs[?OutputKey=='SiteBucketName'].OutputValue" --output text)" >> "$GITHUB_OUTPUT"
+          echo "distribution=$(aws cloudformation describe-stacks --stack-name "$AWS_STACK_NAME" --query "Stacks[0].Outputs[?OutputKey=='DistributionId'].OutputValue" --output text)" >> "$GITHUB_OUTPUT"
+          echo "url=$(aws cloudformation describe-stacks --stack-name "$AWS_STACK_NAME" --query "Stacks[0].Outputs[?OutputKey=='SiteUrl'].OutputValue" --output text)" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload website
+        run: >-
+          aws s3 sync site/ "s3://${{ steps.site.outputs.bucket }}/"
+          --delete
+          --cache-control "no-cache"
+
+      - name: Invalidate CloudFront cache
+        run: aws cloudfront create-invalidation --distribution-id "${{ steps.site.outputs.distribution }}" --paths "/*"

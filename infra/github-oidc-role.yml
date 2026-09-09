@@ -1,0 +1,91 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: GitHub Actions OIDC deployment role for the LeticiaFS Capstone repository.
+
+Parameters:
+  GitHubOidcProviderArn:
+    Type: String
+    Description: ARN for the existing token.actions.githubusercontent.com IAM OIDC provider.
+  GitHubRepository:
+    Type: String
+    Default: JYOshiro/LeticiaFS_Capstone
+    Description: GitHub owner/repository allowed to use this deployment role.
+
+Resources:
+  GitHubWebsiteDeployRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: LeticiaFSCapstoneGitHubDeploy
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Ref GitHubOidcProviderArn
+            Action: sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                token.actions.githubusercontent.com:aud: sts.amazonaws.com
+              StringLike:
+                token.actions.githubusercontent.com:sub:
+                  - !Sub 'repo:${GitHubRepository}:environment:production'
+                  - 'repo:JYOshiro@*/LeticiaFS_Capstone@*:environment:production'
+      Policies:
+        - PolicyName: DeployLeticiaFSCapstoneStaticSite
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Sid: ManageWebsiteStack
+                Effect: Allow
+                Action:
+                  - cloudformation:CreateChangeSet
+                  - cloudformation:CreateStack
+                  - cloudformation:DeleteChangeSet
+                  - cloudformation:DescribeChangeSet
+                  - cloudformation:DescribeStacks
+                  - cloudformation:ExecuteChangeSet
+                  - cloudformation:GetTemplateSummary
+                  - cloudformation:UpdateStack
+                Resource: '*'
+              - Sid: ManageWebsiteContent
+                Effect: Allow
+                Action:
+                  - s3:DeleteObject
+                  - s3:GetObject
+                  - s3:ListBucket
+                  - s3:PutObject
+                Resource: '*'
+              - Sid: ProvisionWebsiteInfrastructure
+                Effect: Allow
+                Action:
+                  - s3:CreateBucket
+                  - s3:DeleteBucket
+                  - s3:GetBucketEncryption
+                  - s3:GetBucketOwnershipControls
+                  - s3:GetBucketPolicy
+                  - s3:GetBucketPublicAccessBlock
+                  - s3:GetBucketVersioning
+                  - s3:PutBucketEncryption
+                  - s3:PutEncryptionConfiguration
+                  - s3:PutBucketOwnershipControls
+                  - s3:PutBucketPolicy
+                  - s3:PutBucketPublicAccessBlock
+                  - s3:PutBucketVersioning
+                  - cloudfront:CreateDistribution
+                  - cloudfront:CreateOriginAccessControl
+                  - cloudfront:DeleteDistribution
+                  - cloudfront:DeleteOriginAccessControl
+                  - cloudfront:GetDistribution
+                  - cloudfront:GetDistributionConfig
+                  - cloudfront:GetOriginAccessControl
+                  - cloudfront:UpdateDistribution
+                  - cloudfront:UpdateOriginAccessControl
+                Resource: '*'
+              - Sid: InvalidateWebsiteDistribution
+                Effect: Allow
+                Action: cloudfront:CreateInvalidation
+                Resource: '*'
+
+Outputs:
+  DeployRoleArn:
+    Description: Store this value in the GitHub repository variable AWS_DEPLOY_ROLE_ARN.
+    Value: !GetAtt GitHubWebsiteDeployRole.Arn
