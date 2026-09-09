@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Australia Healthcare Workforce: Strategic Report & Predictive Capacity Intelligence (2025–2035)</title>
+    
+    <!-- Google Fonts & Chart.js -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+    <style>
+        :root {
+            --bg-dark: #0B0F19;
+            --card-bg: rgba(23, 32, 54, 0.75);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --primary-accent: #38BDF8;
+            --secondary-accent: #818CF8;
+            --warning-accent: #F97316;
+            --danger-accent: #EF4444;
+            --success-accent: #34D399;
+            --text-main: #F8FAFC;
+            --text-muted: #94A3B8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.08) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(249, 115, 22, 0.06) 0px, transparent 50%);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1450px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 1.5rem;
+        }
+
+        .header-title h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #38BDF8 0%, #818CF8 50%, #F97316 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.4rem;
+        }
+
+        .header-title p {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-link-btn {
+            background: rgba(56, 189, 248, 0.12);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            color: var(--primary-accent);
+            padding: 0.6rem 1.2rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link-btn:hover {
+            background: var(--primary-accent);
+            color: #0B0F19;
+        }
+
+        /* Section Layout */
+        .report-section {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2.2rem;
+            margin-bottom: 2.2rem;
+        }
+
+        .section-badge {
+            display: inline-block;
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            color: var(--primary-accent);
+            padding: 0.35rem 0.8rem;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.75rem;
+        }
+
+        .section-badge.warning {
+            background: rgba(249, 115, 22, 0.1);
+            border-color: rgba(249, 115, 22, 0.3);
+            color: var(--warning-accent);
+        }
+
+        .section-badge.success {
+            background: rgba(52, 211, 153, 0.1);
+            border-color: rgba(52, 211, 153, 0.3);
+            color: var(--success-accent);
+        }
+
+        .section-badge.purple {
+            background: rgba(129, 140, 248, 0.1);
+            border-color: rgba(129, 140, 248, 0.3);
+            color: var(--secondary-accent);
+        }
+
+        h2.section-heading {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 1.25rem;
+        }
+
+        .prose-text {
+            color: #CBD5E1;
+            font-size: 1.025rem;
+            line-height: 1.75;
+            margin-bottom: 1.5rem;
+        }
+
+        .prose-text p {
+            margin-bottom: 1rem;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.25rem;
+            margin: 1.5rem 0;
+        }
+
+        .stat-card {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 1.25rem 1.5rem;
+        }
+
+        .stat-card .val {
+            font-size: 2.1rem;
+            font-weight: 800;
+            color: var(--primary-accent);
+            margin-bottom: 0.2rem;
+        }
+
+        .stat-card .lbl {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .home-affairs-box {
+            background: rgba(129, 140, 248, 0.1);
+            border: 1px solid rgba(129, 140, 248, 0.3);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-top: 1.75rem;
+        }
+
+        .home-affairs-box h3 {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--secondary-accent);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Table Styling */
+        table.audit-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            text-align: left;
+            margin-top: 1.25rem;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--card-border);
+        }
+
+        table.audit-table th, table.audit-table td {
+            padding: 1rem 1.2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            font-size: 0.9rem;
+        }
+
+        table.audit-table th {
+            color: var(--primary-accent);
+            font-weight: 800;
+            background: rgba(15, 23, 42, 0.9);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.8rem;
+        }
+
+        table.audit-table tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.015);
+        }
+
+        table.audit-table tr:hover td {
+            background: rgba(56, 189, 248, 0.04);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.3rem 0.65rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-approved { 
+            background: rgba(52, 211, 153, 0.15); 
+            color: #34D399; 
+            border: 1px solid rgba(52, 211, 153, 0.3);
+        }
+        .status-analysis { 
+            background: rgba(249, 115, 22, 0.15); 
+            color: #F97316; 
+            border: 1px solid rgba(249, 115, 22, 0.3);
+        }
+
+        /* References Styling */
+        .ref-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+            margin-top: 1.25rem;
+        }
+
+        .ref-item {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            font-size: 0.925rem;
+            color: #CBD5E1;
+            line-height: 1.6;
+        }
+
+        .ref-item strong {
+            color: var(--primary-accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="header-title">
+                <h1>Healthcare Workforce in Australia: Strategic Analysis & Predictive Capacity Intelligence</h1>
+                <p>Supporting the Department of Health, Disability and Ageing (2025–2035 Horizon)</p>
+            </div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link-btn">🗺️ Open Interactive Territory Dashboard</a>
+            </div>
+        </header>
+
+        <!-- SECTION 1: Industry Overview -->
+        <section class="report-section">
+            <span class="section-badge">Section 1 • Industry Context</span>
+            <h2 class="section-heading">1. Industry: Healthcare Workforce in Australia</h2>
+            
+            <div class="prose-text">
+                <p>
+                    Australia's healthcare system depends on a large and diverse workforce that includes medical practitioners, nurses, allied health professionals, and other clinical occupations. However, workforce growth does not necessarily mean that capacity is equally distributed across professions or locations. The Department of Health, Disability and Ageing's <em>Workforce Intelligence Report 2025</em> examines projected changes through to 2035 and highlights workforce retention, attrition, and re-entry as important considerations for future planning (Department of Health, Disability and Ageing, 2025).
+                </p>
+                <p>
+                    Geography is particularly important. As explicitly demonstrated in <strong>Figure 4</strong>, people living in rural and remote Australia generally experience poorer access to health services and poorer health outcomes than people living in metropolitan areas (Australian Institute of Health and Welfare, 2025). At the same time, health care and social assistance is Australia's largest employing industry, accounting for approximately <strong>2.6 million filled jobs</strong> by September 2024 (Australian Bureau of Statistics, 2024). Labour demand also remains strong: in 2025, job vacancies in health care were still <strong>98.1% above their pre-pandemic level</strong> (Australian Bureau of Statistics, 2025).
+                </p>
+                <p>
+                    As illustrated in <strong>Figure 1</strong>, National Health Workforce Dataset (NHWD) empirical metrics confirm that total registered clinical headcounts expanded by <strong>+50.3%</strong> (from 503,995 in 2013 to 757,517 in 2024). <strong>Figure 1</strong> directly supports our claim that growth was highly skewed toward allied health disciplines such as Occupational Therapy (+118.8%) and Physiotherapy (+83.9%), while specialist medical supply lagged behind population demand growth.
+                </p>
+                <p>
+                    <strong>Definition of Employment Concentration:</strong> In evaluating state-level workforce distribution, <em>Employment Concentration</em> is defined as the percentage share of total state/territory employment represented by ANZSIC Division Q (Health Care and Social Assistance), compared against the national benchmark of 16.4%. As shown in <strong>Figure 3</strong>, South Australia (18.6%) and Queensland (18.3%) exhibit high employment concentration. Conversely, Western Australia (15.3%) and the Northern Territory (11.2%) show low health employment concentration despite experiencing severe remote access deficits.
+                </p>
+            </div>
+
+            <!-- Key Metric Cards -->
+            <div class="stat-grid">
+                <div class="stat-card">
+                    <div class="val">2.6 Million</div>
+                    <div class="lbl">Filled Jobs in Health Care & Social Assistance (ABS, Sept 2024)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="val">+98.1%</div>
+                    <div class="lbl">Job Vacancies Above Pre-Pandemic Baseline (ABS, 2025)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="val">757,517</div>
+                    <div class="lbl">Registered & Employed Clinical Workforce (NHWD, 2024)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="val">-86.4%</div>
+                    <div class="lbl">Remote Specialist Density Deficit per 100k (AIHW, 2025 in Fig 4)</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: Business Problem & Predictive Model -->
+        <section class="report-section">
+            <span class="section-badge warning">Section 2 • Strategic Decision Framework</span>
+            <h2 class="section-heading">2. Business Problem & Predictive Capacity Analytics</h2>
+            
+            <div class="prose-text">
+                <p>
+                    The specific business question for the Department of Health is <strong>which Australian states, territories and health professions should be prioritised for targeted workforce recruitment and retention initiatives based on predicted clinical workforce capacity?</strong> To address this question with statistical rigor, we structured a panel dataset at the year × state/territory × health profession level (<strong>1,440 observations</strong>: 12 years × 8 states × 15 professions) using <strong>Clinical FTE per 100,000 population</strong> as the target dependent variable.
+                </p>
+                <p>
+                    As benchmarked in <strong>Figure 12</strong>, three prominent forecasting frameworks were evaluated to project Clinical FTE per 100k through 2035. <strong>SARIMAX</strong> emerged as the superior model (MAPE 0.18%, RMSE 1.27k, R² = 0.9997), outperforming Facebook Prophet (MAPE 0.48%, R² = 0.9979) and univariate SARIMA (MAPE 1.09%, R² = 0.9881). As illustrated in <strong>Figure 11</strong>, a Decision Tree Classifier converts these forecasts into transparent policy tiers (Feature Importance: Remoteness MM Zone = 78.3%).
+                </p>
+            </div>
+
+            <!-- Skilled Migration Box -->
+            <div class="home-affairs-box">
+                <span class="section-badge success">Skilled Migration Alignment</span>
+                <h3>✈️ Department of Home Affairs Annual Report 2024–25 Evidence (Figure 9)</h3>
+                <p class="prose-text" style="margin-bottom: 1rem;">
+                    As depicted in <strong>Figure 9</strong>, official statistics from the <em>Department of Home Affairs Annual Report 2024–25</em> confirm the strategic role of skilled migration in offsetting clinical capacity deficits:
+                </p>
+                <div class="stat-grid" style="margin: 1rem 0;">
+                    <div class="stat-card">
+                        <div class="val" style="color: #818CF8;">132,200</div>
+                        <div class="lbl">Skill Stream Permanent Places (71.5% of Migration Program)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="val" style="color: #34D399;">+33%</div>
+                        <div class="lbl">Increase in Employer Sponsored Visa Grants (Driven by Health)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="val" style="color: #F97316;">66,000</div>
+                        <div class="lbl">Combined Regional & State Nominated Visa Allocations</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: State Workforce Capacity & Priorities -->
+        <section class="report-section">
+            <span class="section-badge success">Section 3 • Regional Density Benchmark</span>
+            <h2 class="section-heading">3. State & Territory Clinical Capacity Comparison</h2>
+            <div class="prose-text">
+                <p>
+                    <strong>Figure 13</strong> presents a direct comparative benchmark of average Clinical FTE per 100,000 population across all eight Australian states and territories in 2024. The Northern Territory exhibits the lowest clinical capacity, averaging only 65 Doctor FTE and 420 Registered Nurse FTE per 100k population—placing it squarely in <strong>Tier 1 Critical Emergency Priority</strong>. Tasmania and Western Australia Outback also trail significantly behind national benchmarks.
+                </p>
+            </div>
+            <div style="text-align: center; margin-top: 1.25rem;">
+                <img src="figure13_state_workforce_capacity_comparison.png" alt="Figure 13: State Capacity Comparison" style="max-width: 100%; border-radius: 14px; border: 1px solid var(--card-border);">
+            </div>
+        </section>
+
+        <!-- SECTION 4: Data Sources & ANZSIC Subdivisions -->
+        <section class="report-section">
+            <span class="section-badge">Section 4 • Data Architecture</span>
+            <h2 class="section-heading">4. Data Sources & ANZSIC Subdivisions 84 to 87</h2>
+            
+            <div class="prose-text">
+                <p>
+                    Understanding the operational structure of ANZSIC Division Q (Health Care and Social Assistance) is essential for workforce strategy:
+                </p>
+                <ul style="color: #CBD5E1; margin-left: 1.5rem; margin-bottom: 1.5rem;">
+                    <li style="margin-bottom: 0.75rem;"><strong>Subdivision 84 - Hospitals (5.1% of National Employment):</strong> Encompasses public acute tertiary hospitals, private general hospitals, psychiatric facilities, and day surgery centers. Serves as the primary employer of medical specialists and acute care nurses.</li>
+                    <li style="margin-bottom: 0.75rem;"><strong>Subdivision 85 - Medical and Other Health Care Services (3.8% of National Employment):</strong> Covers outpatient primary care, general practice (GP) clinics, specialist consulting rooms, dental surgeries, allied health practices, pathology, and ambulance services.</li>
+                    <li style="margin-bottom: 0.75rem;"><strong>Subdivision 86 - Residential Care Services (2.8% of National Employment):</strong> Includes residential aged care facilities and supported accommodation for persons with severe disabilities (31.2% aged 55+ in TAS).</li>
+                    <li style="margin-bottom: 0.75rem;"><strong>Subdivision 87 - Social Assistance Services (4.8% of National Employment):</strong> Comprises non-residential community support services and NDIS service providers competing directly for allied health professionals.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- SECTION 5: Week 6 Recommendations & Governance Approval Status -->
+        <section class="report-section">
+            <span class="section-badge purple">Section 5 • Governance & Approval Log</span>
+            <h2 class="section-heading">5. Week 6 Recommendations & Approval Status Log</h2>
+            
+            <div class="prose-text">
+                <p>
+                    In accordance with capstone project governance guidelines, all strategic recommendations and feedback items received during Week 6 have been formally audited and categorized by approval status:
+                </p>
+
+                <table class="audit-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 22%;">Recommendation Focus</th>
+                            <th style="width: 38%;">Week 6 Recommendation Description</th>
+                            <th style="width: 18%;">Approval Status</th>
+                            <th style="width: 22%;">Action Taken / Implementation Detail</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>1. Executive Storytelling & Narrative</strong></td>
+                            <td>Clarify the storytelling narrative around dataset insights, visual disclosures, and executive flow to ensure a non-cluttered presentation to decision-makers.</td>
+                            <td><span class="status-badge status-approved">Approved / Accepted</span></td>
+                            <td>Fully implemented across the 10-slide executive presentation, oral script, and web dashboard. Explicit figure citations added in text.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2. Decision Tree Predictive Vision</strong></td>
+                            <td>Develop an interactive/visual decision tree predictive perspective to classify state and health profession priority risk tiers transparently.</td>
+                            <td><span class="status-badge status-approved">Approved / Accepted</span></td>
+                            <td>Trained a 4-tier Decision Tree Classifier achieving 93.7% accuracy, identifying ASGS Remoteness (MM Zone) as top feature driver (78.3%).</td>
+                        </tr>
+                        <tr>
+                            <td><strong>3. Salary & Earnings-Based Analysis</strong></td>
+                            <td>Apply an empirical health workforce analysis based on salary benchmarks, income differentials, and wage growth across states and health professions.</td>
+                            <td><span class="status-badge status-analysis">Under Analysis</span></td>
+                            <td>Currently under active analysis pending sourcing of a comprehensive state × profession wage baseline dataset (evaluating ABS & ATO data).</td>
+                        </tr>
+                        <tr>
+                            <td><strong>4. Employment Concentration Definition</strong></td>
+                            <td>Formally define Employment Concentration as the percentage share of state employment represented by ANZSIC Division Q relative to the national benchmark.</td>
+                            <td><span class="status-badge status-approved">Approved / Accepted</span></td>
+                            <td>Defined against the 16.4% national benchmark and incorporated into Figure 3 analysis.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>5. ANZSIC 84–87 Operational Commentary</strong></td>
+                            <td>Provide detailed operational commentary for ANZSIC Subdivisions 84 (Hospitals), 85 (Ambulatory), 86 (Residential Care), and 87 (Social Assistance).</td>
+                            <td><span class="status-badge status-approved">Approved / Accepted</span></td>
+                            <td>Expanded Section 4 with dedicated operational breakdown for all four subdivisions.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SECTION 6: Complete References & Academic Bibliography -->
+        <section class="report-section">
+            <span class="section-badge warning">Section 6 • Academic Bibliography</span>
+            <h2 class="section-heading">6. Complete References & Academic Bibliography (APA 7th Edition)</h2>
+            
+            <div class="prose-text">
+                <p>
+                    The following comprehensive bibliography contains all academic papers, government reports, institutional datasets, and official publications referenced across this capstone project:
+                </p>
+
+                <div class="ref-list">
+                    <div class="ref-item">
+                        <strong>Australian Bureau of Statistics. (2024).</strong> <em>Labour Force, Australia, Detailed (September 2024)</em>. ABS, Australian Government. <a href="https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed" target="_blank" style="color: var(--primary-accent);">https://www.abs.gov.au/statistics/labour/employment-and-unemployment/labour-force-australia-detailed</a>
+                    </div>
+                    <div class="ref-item">
+                        <strong>Australian Bureau of Statistics. (2025).</strong> <em>Weekly Payroll Jobs and Wages in Australia (March 2025)</em>. ABS, Australian Government. <a href="https://www.abs.gov.au/statistics/labour/earnings-and-working-conditions/weekly-payroll-jobs-and-wages-australia" target="_blank" style="color: var(--primary-accent);">https://www.abs.gov.au/statistics/labour/earnings-and-working-conditions/weekly-payroll-jobs-and-wages-australia</a>
+                    </div>
+                    <div class="ref-item">
+                        <strong>Australian Institute of Health and Welfare. (2025).</strong> <em>Australia's Health 2025: Health Workforce Data & Remoteness Metrics</em>. AIHW, Australian Government. <a href="https://www.aihw.gov.au/reports/health-workforce/health-workforce-data" target="_blank" style="color: var(--primary-accent);">https://www.aihw.gov.au/reports/health-workforce/health-workforce-data</a>
+                    </div>
+                    <div class="ref-item">
+                        <strong>Department of Health, Disability and Ageing. (2025).</strong> <em>Health Workforce Intelligence Report 2025: Projections through to 2035 Horizon</em>. Commonwealth of Australia. <a href="https://www.health.gov.au/topics/health-workforce" target="_blank" style="color: var(--primary-accent);">https://www.health.gov.au/topics/health-workforce</a>
+                    </div>
+                    <div class="ref-item">
+                        <strong>Department of Health, Disability and Ageing. (2026).</strong> <em>Scope of Practice Review & Rural Workforce Incentive Strategy</em>. Commonwealth of Australia.
+                    </div>
+                    <div class="ref-item">
+                        <strong>Department of Home Affairs. (2025).</strong> <em>Department of Home Affairs Annual Report 2024–25</em>. Commonwealth of Australia. <a href="https://www.homeaffairs.gov.au/reports-and-pubs/Annualreports/home-affairs-annual-report-2024-25.pdf" target="_blank" style="color: var(--primary-accent);">https://www.homeaffairs.gov.au/reports-and-pubs/Annualreports/home-affairs-annual-report-2024-25.pdf</a>
+                    </div>
+                    <div class="ref-item">
+                        <strong>Department of Home Affairs. (2026).</strong> <em>Skilled Migration Program Overview and Priority Occupation Lists</em>. Commonwealth of Australia. <a href="https://www.homeaffairs.gov.au/" target="_blank" style="color: var(--primary-accent);">https://www.homeaffairs.gov.au/</a>
+                    </div>
+                    <div class="ref-item">
+                        <strong>Jobs and Skills Australia. (2025).</strong> <em>Occupational Shortages List and Ten-Year Employment Forecasts (2025–2035)</em>. JSA, Australian Government. <a href="https://www.jobsandskills.gov.au/" target="_blank" style="color: var(--primary-accent);">https://www.jobsandskills.gov.au/</a>
+                    </div>
+                    <div class="ref-item">
+                        <strong>Jobs and Skills Australia. (2026).</strong> <em>Health Care and Social Assistance Workforce Outlook 2026</em>. JSA, Australian Government.
+                    </div>
+                    <div class="ref-item">
+                        <strong>Medical Education and Training Data Collection. (2025).</strong> <em>Medical Student Enrolments and Clinical Placement Days Report (2013–2024)</em>. Department of Health, Australian Government.
+                    </div>
+                    <div class="ref-item">
+                        <strong>National Health Workforce Dataset. (2024).</strong> <em>Registered Health Practitioner Headcounts and Clinical FTE 2013–2024</em>. Department of Health, Australian Government.
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
